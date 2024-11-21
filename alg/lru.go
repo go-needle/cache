@@ -67,12 +67,6 @@ func (c *LRU) Delete(key string) {
 	}
 }
 
-// Exist checks a value in the cache.
-func (c *LRU) Exist(key string) bool {
-	_, ok := c.cache[key]
-	return ok
-}
-
 // removeOldest removes the oldest item
 func (c *LRU) removeOldest() {
 	ele := c.head.next

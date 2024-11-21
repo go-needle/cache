@@ -23,9 +23,6 @@ func (c *Cache) Add(key string, value []byte) {
 	c.cache.Add(key, value)
 	go func() {
 		time.Sleep(c.maxSurvivalTime)
-		if !c.cache.Exist(key) {
-			return
-		}
 		c.mu.Lock()
 		defer c.mu.Unlock()
 		c.cache.Delete(key)
