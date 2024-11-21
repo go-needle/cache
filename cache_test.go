@@ -12,7 +12,7 @@ func TestCache(t *testing.T) {
 	c := NewFIFO(1024, time.Duration(4)*time.Second)
 	//c := NewLRU(1024, time.Duration(4)*time.Second)
 	c.Add("key1", []byte("123456"))
-	if v, ok := c.Get("key1"); !ok || string(v) != "123456" {
+	if v, ok := c.Get("key1"); !ok || v.String() != "123456" {
 		t.Fatalf("cache hit key1=123456 failed")
 	}
 	time.Sleep(time.Duration(2) * time.Second)

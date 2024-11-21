@@ -8,7 +8,7 @@ import (
 
 type Cache interface {
 	Add(key string, value []byte)
-	Get(key string) ([]byte, bool)
+	Get(key string) (ByteView, bool)
 }
 
 type LRUCache struct {
@@ -16,6 +16,7 @@ type LRUCache struct {
 	cache           *alg.LRU
 	cacheBytes      int64
 	keySurvivalTime time.Duration
+	once            sync.Once
 }
 
 // NewLRU creates a new cache struct and use the LRU algorithm
@@ -26,11 +27,11 @@ func NewLRU(cacheBytes int64, keySurvivalTime time.Duration) *LRUCache {
 // Add is safe for concurrent access.
 func (c *LRUCache) Add(key string, value []byte) {
 	v := cloneBytes(value)
+	c.once.Do(func() {
+		c.cache = alg.NewLRU(c.cacheBytes)
+	})
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if c.cache == nil {
-		c.cache = alg.NewLRU(c.cacheBytes)
-	}
 	c.cache.Add(key, v)
 	go func() {
 		time.Sleep(c.keySurvivalTime)
@@ -58,6 +59,7 @@ type FIFOCache struct {
 	cache           *alg.FIFO
 	cacheBytes      int64
 	keySurvivalTime time.Duration
+	once            sync.Once
 }
 
 // NewFIFO creates a new cache struct and use the FIFO algorithm
@@ -68,11 +70,11 @@ func NewFIFO(cacheBytes int64, keySurvivalTime time.Duration) *LRUCache {
 // Add is safe for concurrent access.
 func (c *FIFOCache) Add(key string, value []byte) {
 	v := cloneBytes(value)
+	c.once.Do(func() {
+		c.cache = alg.NewFIFO(c.cacheBytes)
+	})
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if c.cache == nil {
-		c.cache = alg.NewFIFO(c.cacheBytes)
-	}
 	c.cache.Add(key, v)
 	go func() {
 		time.Sleep(c.keySurvivalTime)
