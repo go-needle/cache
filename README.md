@@ -34,17 +34,21 @@ import (
 )
 
 func main() {
-	c := cache.NewLRU(1<<32, time.Duration(10)*time.Second)
-	// c := cache.NewFIFO(1<<32, time.Duration(10)*time.Second)
+	c := cache.NewLRU(1024, time.Duration(10)*time.Second)
+	//c := cache.NewFIFO(1<<32, time.Duration(10)*time.Second)
 	for i := 0; i < 1000; i++ {
-		c.Add("key"+strconv.Itoa(i), []byte(strconv.Itoa(i)))
+		num := i
+		go func() {
+			time.Sleep(time.Duration(rand.Intn(10)) * time.Second)
+			c.Add("key"+strconv.Itoa(num), []byte(strconv.Itoa(num)))
+		}()
 	}
 	for i := 0; i < 1000; i++ {
 		num := i
 		go func() {
 			time.Sleep(time.Duration(rand.Intn(20)) * time.Second)
 			v, ok := c.Get("key" + strconv.Itoa(num))
-			fmt.Println(v, ok)
+			fmt.Println(v.String(), ok)
 		}()
 	}
 	time.Sleep(time.Duration(20) * time.Second)
