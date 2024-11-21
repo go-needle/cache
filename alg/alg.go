@@ -1,7 +1,8 @@
 package alg
 
-type Alg interface {
-	Get(key string) ([]byte, bool)
-	Add(key string, value []byte)
-	Delete(key string)
+type node struct {
+	val  []byte
+	key  string
+	prev *node
+	next *node
 }
