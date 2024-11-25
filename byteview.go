@@ -5,6 +5,11 @@ type ByteView struct {
 	b []byte
 }
 
+// NewByteView creates a new ByteView  struct
+func NewByteView(b []byte) ByteView {
+	return ByteView{b: b}
+}
+
 // Len returns the view's length
 func (v ByteView) Len() int {
 	return len(v.b)
