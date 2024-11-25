@@ -11,6 +11,9 @@ a simple cache framework for golang
 <img src="https://img.shields.io/badge/golang-1.21+-blue" alt="golang">
 </div>
 
+## introduction
+This is a cache framework implemented by Golang. This framework implements the FIFO and LRU algorithms for managing cache and is thread safe. The algorithm needs to be selected based on the actual situation, and using FIFO in an environment with more reads and less writes will result in higher performance.
+
 ## installing
 Select the version to install
 
