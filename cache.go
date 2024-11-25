@@ -26,13 +26,12 @@ func NewLRU(cacheBytes int64, keySurvivalTime time.Duration) *LRUCache {
 
 // Add is safe for concurrent access.
 func (c *LRUCache) Add(key string, value []byte) {
-	v := cloneBytes(value)
 	c.once.Do(func() {
 		c.cache = alg.NewLRU(c.cacheBytes)
 	})
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	c.cache.Add(key, v)
+	c.cache.Add(key, value)
 	go func() {
 		time.Sleep(c.keySurvivalTime)
 		c.mu.Lock()
@@ -69,13 +68,12 @@ func NewFIFO(cacheBytes int64, keySurvivalTime time.Duration) *LRUCache {
 
 // Add is safe for concurrent access.
 func (c *FIFOCache) Add(key string, value []byte) {
-	v := cloneBytes(value)
 	c.once.Do(func() {
 		c.cache = alg.NewFIFO(c.cacheBytes)
 	})
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	c.cache.Add(key, v)
+	c.cache.Add(key, value)
 	go func() {
 		time.Sleep(c.keySurvivalTime)
 		c.mu.Lock()

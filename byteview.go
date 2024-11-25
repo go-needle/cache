@@ -17,7 +17,7 @@ func (v ByteView) Len() int {
 
 // ByteSlice returns a copy of the data as a byte slice.
 func (v ByteView) ByteSlice() []byte {
-	return cloneBytes(v.b)
+	return CloneBytes(v.b)
 }
 
 // ByteSource returns the byte slice of source.
@@ -30,7 +30,7 @@ func (v ByteView) String() string {
 	return string(v.b)
 }
 
-func cloneBytes(b []byte) []byte {
+func CloneBytes(b []byte) []byte {
 	c := make([]byte, len(b))
 	copy(c, b)
 	return c
